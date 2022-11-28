@@ -192,18 +192,18 @@ async function run() {
 
 // //....................bookings data...............\\
 
-// app.get('/bookings', async (req, res) => {
-//     const email = req.query.email;
-//     // const decodedEmail=req.decoded.email
-//     // if(email !== decodedEmail){
-//     //     return res.status(403).send({message:"foridden access"})
-//     // }
-//     // console.log(req.headers.authorization)
-//      const query={ email: email}
+app.get('/bookings', async (req, res) => {
+    const email = req.query.email;
+    // const decodedEmail=req.decoded.email
+    // if(email !== decodedEmail){
+    //     return res.status(403).send({message:"foridden access"})
+    // }
+    // console.log(req.headers.authorization)
+     const query={ email: email}
     
-//     const bookings = await bookingCollection.find(query).toArray();
-//     res.send(bookings);
-// });
+    const bookings = await bookingCollection.find(query).toArray();
+    res.send(bookings);
+});
 
 
 
