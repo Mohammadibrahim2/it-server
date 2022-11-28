@@ -218,21 +218,21 @@ app.post('/bookings', async (req, res) => {
 
 
 
-// //....................bookings data...............\\
+//....................bookings data...............\\
 
-//     }
-//     finally {
+    }
+    finally {
 
-//     }
+    }
 
-// }
-// run().catch(console.dir)
+}
+run().catch(console.dir)
 
 
 
-// app.listen(port, () => {
-//     console.log("hi server ", port)
-// })
+app.listen(port, () => {
+    console.log("hi server ", port)
+})
 
 //resale-market
 //AZ9RDCN7iytTHvPM
