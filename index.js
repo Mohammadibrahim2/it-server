@@ -209,12 +209,12 @@ app.get('/bookings', async (req, res) => {
 
 
 
-// app.post('/bookings', async (req, res) => {
-//     const bookedData = req.body;
+app.post('/bookings', async (req, res) => {
+    const bookedData = req.body;
   
-//     const result = await bookingCollection.insertOne(bookedData);
-//     res.send(result);
-// });
+    const result = await bookingCollection.insertOne(bookedData);
+    res.send(result);
+});
 
 
 
