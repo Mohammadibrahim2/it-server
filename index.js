@@ -1,106 +1,106 @@
-// const express = require('express')
-// const app = express()
-// const cors = require('cors')
-// app.use(cors())
-// app.use(express.json())
-// const port = process.env.PORT || 5000;
-// const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-// const jwt = require('jsonwebtoken')
-// require('dotenv').config();
-// require('dotenv').config()
+const express = require('express')
+const app = express()
+const cors = require('cors')
+app.use(cors())
+app.use(express.json())
+const port = process.env.PORT || 5000;
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const jwt = require('jsonwebtoken')
+require('dotenv').config();
+require('dotenv').config()
 
 
 
 
-// const uri = "mongodb+srv://resale-market:AZ9RDCN7iytTHvPM@cluster0.ye2spym.mongodb.net/?retryWrites=true&w=majority";
-// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+const uri = "mongodb+srv://resale-market:AZ9RDCN7iytTHvPM@cluster0.ye2spym.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-// // ------------------------------: verification jwt :--------------------------\\
-
-
-// function verifyJWT(req, res, next) {
-//     const authHeader = req.headers.authorization
-//     if (!authHeader) {
-//         return res.status(401).send('usauthorized asccess');
-//     }
-//     const token = authHeader.split(' ')[1];
-
-//     jwt.verify(token, process.env.ACCRSS_TOKEN, function (err, decoded) {
-//         if (err) {
-//             return res.status(403).send({ message: 'forbidden access' })
-//         }
-//         req.decoded = decoded;
-//         next();
-//     })
-// }
+// ------------------------------: verification jwt :--------------------------\\
 
 
-// // ------------------------------:  verification jwt :--------------------------\\
-// async function run() {
-//     try {
-//         const productsCollection = client.db("resale-market-product").collection("productCollection");
+function verifyJWT(req, res, next) {
+    const authHeader = req.headers.authorization
+    if (!authHeader) {
+        return res.status(401).send('usauthorized asccess');
+    }
+    const token = authHeader.split(' ')[1];
 
-//         const usersCollection = client.db("resale-market-product").collection("usersStorage")
-//         const bookingCollection = client.db("resale-market-product").collection("bookingCollection")
-//         const paymentCollection = client.db("resale-market-product").collection("paymentCollection")
+    jwt.verify(token, process.env.ACCRSS_TOKEN, function (err, decoded) {
+        if (err) {
+            return res.status(403).send({ message: 'forbidden access' })
+        }
+        req.decoded = decoded;
+        next();
+    })
+}
+
+
+// ------------------------------:  verification jwt :--------------------------\\
+async function run() {
+    try {
+        const productsCollection = client.db("resale-market-product").collection("productCollection");
+
+        const usersCollection = client.db("resale-market-product").collection("usersStorage")
+        const bookingCollection = client.db("resale-market-product").collection("bookingCollection")
+        const paymentCollection = client.db("resale-market-product").collection("paymentCollection")
 
 
 
         
-//         const verifyAdmin = async (req, res, next) => {
-//             const decodedEmail = req.decoded.email;
-//             const query = { email: decodedEmail };
-//             const user = await usersCollection.findOne(query);
+        // const verifyAdmin = async (req, res, next) => {
+        //     const decodedEmail = req.decoded.email;
+        //     const query = { email: decodedEmail };
+        //     const user = await usersCollection.findOne(query);
 
-//             if (user?.role !== "admin") {
-//                 return res.status(403).send({ message: "forbidden access" })
+        //     if (user?.role !== "admin") {
+        //         return res.status(403).send({ message: "forbidden access" })
 
-//             }
-//             next();
-//         }
+        //     }
+        //     next();
+        // }
 
-//         // ------------------------------:  verification admin :--------------------------\\
+        // // ------------------------------:  verification admin :--------------------------\\
 
        
-//         app.post('/users', async (req, res) => {
-//             const user = req.body;
-//             console.log(user);
-//             const result = await usersCollection.insertOne(user);
-//             res.send(result);
-//         });
+        // app.post('/users', async (req, res) => {
+        //     const user = req.body;
+        //     console.log(user);
+        //     const result = await usersCollection.insertOne(user);
+        //     res.send(result);
+        // });
 
-//         app.get('/allusers', async (req, res) => {
-//             const query = {};
+        // app.get('/allusers', async (req, res) => {
+        //     const query = {};
 
-//             const cursor = await usersCollection.find(query).toArray()
-//             res.send(cursor);
-//         });
-//         app.delete("/allusers/:id",async(req,res)=>{
-//             const id=req.params.id
-//             console.log(id)
-//             const query={_id: ObjectId(id)}
-//             const deletedresult=await usersCollection.deleteOne(query)
-//             res.send(deletedresult)
-//         })
+        //     const cursor = await usersCollection.find(query).toArray()
+        //     res.send(cursor);
+        // });
+        // app.delete("/allusers/:id",async(req,res)=>{
+        //     const id=req.params.id
+        //     console.log(id)
+        //     const query={_id: ObjectId(id)}
+        //     const deletedresult=await usersCollection.deleteOne(query)
+        //     res.send(deletedresult)
+        // })
 
 
 
-//         app.get("/category/:title", async (req, res) => {
-//             const title = req.params.title
+        app.get("/category/:title", async (req, res) => {
+            const title = req.params.title
             
 
-//             const query = { category: title }
-//             const cursor = await productsCollection.find(query).toArray()
-//             res.send(cursor)
+            const query = { category: title }
+            const cursor = await productsCollection.find(query).toArray()
+            res.send(cursor)
 
 
-//         });
-//         app.post('/category', async (req, res) => {
-//             const product = req.body
-//             console.log(product);
-//             const result = await productsCollection.insertOne(product);
-//             res.send(result);
-//         });
+        });
+        app.post('/category', async (req, res) => {
+            const product = req.body
+            console.log(product);
+            const result = await productsCollection.insertOne(product);
+            res.send(result);
+        });
 
 
 
@@ -234,5 +234,5 @@
 //     console.log("hi server ", port)
 // })
 
-// //resale-market
-// //AZ9RDCN7iytTHvPM
+//resale-market
+//AZ9RDCN7iytTHvPM
