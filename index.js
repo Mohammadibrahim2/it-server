@@ -104,61 +104,61 @@ async function run() {
 
 
 
-//         // ------------------------------: jwt :--------------------------\\
-//         app.get('/jwt', async (req, res) => {
-//             const email = req.query.email
-//             const query = { email: email }
+        // ------------------------------: jwt :--------------------------\\
+        app.get('/jwt', async (req, res) => {
+            const email = req.query.email
+            const query = { email: email }
 
-//             const user = await usersCollection.findOne(query);
-//             if (user) {
-//                 const token = jwt.sign({ email }, process.env.ACCESS_TOKEN, { expiresIn: '1h' })
-//                 return res.send({ accessToken: token });
-//             }
-//             res.status(403).send({ accessToken: "" })
-//         })
+            const user = await usersCollection.findOne(query);
+            if (user) {
+                const token = jwt.sign({ email }, process.env.ACCESS_TOKEN, { expiresIn: '1h' })
+                return res.send({ accessToken: token });
+            }
+            res.status(403).send({ accessToken: "" })
+        })
 
-//         // ------------------------------: jwt :--------------------------\\
+        // ------------------------------: jwt :--------------------------\\
 
        
 
-//         // ------------------------------: admin email :--------------------------\\
+        // ------------------------------: admin email :--------------------------\\
 
-//         app.get("/users/admin/:email", async (req, res) => {
-//             const email = req.params.email;
-//             const query = { email };
-//             const user = await usersCollection.findOne(query);
-//             res.send({ isAdmin: user?.role === "admin" })
+        app.get("/users/admin/:email", async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const user = await usersCollection.findOne(query);
+            res.send({ isAdmin: user?.role === "admin" })
 
-//         })
+        })
 
-//         // ------------------------------: admin email :--------------------------\\
+        // ------------------------------: admin email :--------------------------\\
 
-//         // ------------------------------: verifyAdmin  :--------------------------\\
-//       //  verifyJWT, verifyAdmin,
+        // ------------------------------: verifyAdmin  :--------------------------\\
+      //  verifyJWT, verifyAdmin,
 
-//         app.put('/users/admin/:id', async (req, res) => {
-//             const id = req.params.id;
-//             const filter = { _id: ObjectId(id) }
-//             const options = { upsert: true };
-//             const updatedDoc = {
-//                 $set: {
-//                     role: "admin"
-//                 }
-//             }
-//             const result = await usersCollection.updateOne(filter, updatedDoc, options)
-//             res.send(result)
-//         });
+        app.put('/users/admin/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) }
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    role: "admin"
+                }
+            }
+            const result = await usersCollection.updateOne(filter, updatedDoc, options)
+            res.send(result)
+        });
 
         
-//         app.get("/users/seller", async (req, res) => {
+        app.get("/users/seller", async (req, res) => {
           
-//             const query = {role: "Seller"}
-//             const seller= await usersCollection.find(query).toArray()
+            const query = {role: "Seller"}
+            const seller= await usersCollection.find(query).toArray()
 
           
-//             res.send(seller)
+            res.send(seller)
 
-//         });
+        });
         app.put('/category/:email', async (req, res) => {
             const email = req.params.email;
             console.log(email)
