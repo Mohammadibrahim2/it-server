@@ -42,7 +42,7 @@ async function run() {
 
         const usersCollection = client.db("resale-market-product").collection("usersStorage")
         const bookingCollection = client.db("resale-market-product").collection("bookingCollection")
-        const paymentCollection = client.db("resale-market-product").collection("paymentCollection")
+       
 
 
 
@@ -59,7 +59,7 @@ async function run() {
             next();
         }
 
-        // ------------------------------:  verification admin :--------------------------\\
+       
 
         app.post('/users', async (req, res) => {
             const user = req.body;
@@ -194,11 +194,7 @@ async function run() {
 
 app.get('/bookings', async (req, res) => {
     const email = req.query.email;
-    // const decodedEmail=req.decoded.email
-    // if(email !== decodedEmail){
-    //     return res.status(403).send({message:"foridden access"})
-    // }
-    // console.log(req.headers.authorization)
+    
      const query={ email: email}
     
     const bookings = await bookingCollection.find(query).toArray();
