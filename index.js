@@ -159,30 +159,30 @@ async function run() {
 //             res.send(seller)
 
 //         });
-//         app.put('/category/:email', async (req, res) => {
-//             const email = req.params.email;
-//             console.log(email)
+        app.put('/category/:email', async (req, res) => {
+            const email = req.params.email;
+            console.log(email)
            
-//             const filter = { email: email }
-//             const options = { upsert: true };
-//             const updatedDoc = {
-//                 $set: {
-//                     verified: "verified"
-//                 }
-//             }
-//             const result = await productsCollection.updateOne(filter, updatedDoc, options)
-//             res.send(result)
-//         });
+            const filter = { email: email }
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    verified: "verified"
+                }
+            }
+            const result = await productsCollection.updateOne(filter, updatedDoc, options)
+            res.send(result)
+        });
 
-//         app.delete("/users/seller/:id", async (req, res) => {
-//            const id=req.params.id
-//             const query = {_id: ObjectId(id)}
-//             const deletedSeller= await usersCollection.deleteOne(query)
+        app.delete("/users/seller/:id", async (req, res) => {
+           const id=req.params.id
+            const query = {_id: ObjectId(id)}
+            const deletedSeller= await usersCollection.deleteOne(query)
 
           
-//             res.send(deletedSeller)
+            res.send(deletedSeller)
 
-//         });
+        });
 
 
 
