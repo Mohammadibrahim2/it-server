@@ -47,27 +47,27 @@ async function run() {
 
 
         
-        // const verifyAdmin = async (req, res, next) => {
-        //     const decodedEmail = req.decoded.email;
-        //     const query = { email: decodedEmail };
-        //     const user = await usersCollection.findOne(query);
+        const verifyAdmin = async (req, res, next) => {
+            const decodedEmail = req.decoded.email;
+            const query = { email: decodedEmail };
+            const user = await usersCollection.findOne(query);
 
-        //     if (user?.role !== "admin") {
-        //         return res.status(403).send({ message: "forbidden access" })
+            if (user?.role !== "admin") {
+                return res.status(403).send({ message: "forbidden access" })
 
-        //     }
-        //     next();
-        // }
+            }
+            next();
+        }
 
-        // // ------------------------------:  verification admin :--------------------------\\
+        // ------------------------------:  verification admin :--------------------------\\
 
-       
-        // app.post('/users', async (req, res) => {
-        //     const user = req.body;
-        //     console.log(user);
-        //     const result = await usersCollection.insertOne(user);
-        //     res.send(result);
-        // });
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            console.log(user);
+            const result = await usersCollection.insertOne(user);
+            res.send(result);
+        });
+
 
         app.get('/allusers', async (req, res) => {
             const query = {};
@@ -234,5 +234,3 @@ app.listen(port, () => {
     console.log("hi server ", port)
 })
 
-//resale-market
-//AZ9RDCN7iytTHvPM
