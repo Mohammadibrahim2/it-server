@@ -69,19 +69,19 @@ async function run() {
         //     res.send(result);
         // });
 
-        // app.get('/allusers', async (req, res) => {
-        //     const query = {};
+        app.get('/allusers', async (req, res) => {
+            const query = {};
 
-        //     const cursor = await usersCollection.find(query).toArray()
-        //     res.send(cursor);
-        // });
-        // app.delete("/allusers/:id",async(req,res)=>{
-        //     const id=req.params.id
-        //     console.log(id)
-        //     const query={_id: ObjectId(id)}
-        //     const deletedresult=await usersCollection.deleteOne(query)
-        //     res.send(deletedresult)
-        // })
+            const cursor = await usersCollection.find(query).toArray()
+            res.send(cursor);
+        });
+        app.delete("/allusers/:id",async(req,res)=>{
+            const id=req.params.id
+            console.log(id)
+            const query={_id: ObjectId(id)}
+            const deletedresult=await usersCollection.deleteOne(query)
+            res.send(deletedresult)
+        })
 
 
 
