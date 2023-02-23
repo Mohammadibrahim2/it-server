@@ -41,23 +41,25 @@ async function run() {
         const productsCollection = client.db("resale-market-product").collection("productCollection");
 
         const usersCollection = client.db("resale-market-product").collection("usersStorage")
-        const bookingCollection = client.db("resale-market-product").collection("bookingCollection")
-       
+        // const bookingCollection = client.db("resale-market-product").collection("bookingCollection")
+       const cartAddingCollection=client.db("resale-market-product").collection("orderCollection")
+       const wishAddingCollection=client.db("resale-market-product").collection("wishCollection")
+       const contactCollection=client.db("resale-market-product").collection("contactCollection")
 
 
 
         
-        const verifyAdmin = async (req, res, next) => {
-            const decodedEmail = req.decoded.email;
-            const query = { email: decodedEmail };
-            const user = await usersCollection.findOne(query);
+        // const verifyAdmin = async (req, res, next) => {
+        //     const decodedEmail = req.decoded.email;
+        //     const query = { email: decodedEmail };
+        //     const user = await usersCollection.findOne(query);
 
-            if (user?.role !== "admin") {
-                return res.status(403).send({ message: "forbidden access" })
+        //     if (user?.role !== "admin") {
+        //         return res.status(403).send({ message: "forbidden access" })
 
-            }
-            next();
-        }
+        //     }
+        //     next();
+        // }
 
        
 
@@ -84,6 +86,221 @@ async function run() {
         })
 
 
+        
+        app.get("/category/horizontal", async (req, res) => {
+            
+      
+            let result= await productsCollection.find(
+               
+                {
+                    $or:[
+                        {category:{$regex:"mobile"} },
+                        {category:{$regex:"tablet"} },
+                        
+                    ]
+                }
+               
+            ).toArray()
+            
+
+           
+            res.send(result)
+
+
+        });
+        app.get("/category/vertical", async (req, res) => {
+            
+      
+            let result= await productsCollection.find(
+               
+                {
+                    $or:[
+                        {type:{$regex:"vertical1"} },
+                        
+                    ]
+                }
+               
+            ).toArray()
+            
+
+           
+            res.send(result)
+
+
+        });
+        //mediam products:-------
+
+
+
+
+        app.get("/category/mediam", async (req, res) => {
+            
+      
+            let result= await productsCollection.find(
+               
+                {
+                    $or:[
+                        {type:{$regex:"mediam"} },
+                        
+                    ]
+                }
+               
+            ).toArray()
+            
+
+           
+            res.send(result)
+
+
+        });
+
+
+
+
+
+
+
+
+  
+
+
+
+
+        app.get("/category/otherHorizontal", async (req, res) => {
+            
+      
+            let cursor= await productsCollection.find(
+               
+                {
+                    $or:[
+                        {type:{$regex:"other-horizontal"} }
+                        
+                    ]
+                }
+               
+            ).toArray()
+            
+
+           
+            res.send(cursor)
+
+
+        });
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+        app.get("/category/otherVertical", async (req, res) => {
+            
+      
+            let result= await productsCollection.find(
+               
+                {
+                    $or:[
+                        {type:{$regex:"other-vertical"} },
+                        
+                    ]
+                }
+               
+            ).toArray()
+            
+
+           
+            res.send(result)
+
+
+        });
+
+
+
+
+
+
+
+
+          //other products:-------
+
+///all products:---
+
+app.get("/allproducts", async (req, res) => {
+    
+    
+
+    const page=parseInt(req.query.page )
+           const size=parseInt(req.query.size)
+            const query={}
+            
+            const cursor= productsCollection.find(query)
+            const result=await  cursor.skip(page*size).limit(size).toArray()
+            const count=await productsCollection.estimatedDocumentCount()
+            const procount=await cartAddingCollection.estimatedDocumentCount()
+            res.send({result,count,procount})
+
+
+});
+//searching-----
+
+// app.get("/allproducts/:name", async (req, res) => {
+    
+    
+
+//    console.log(req.params.name)
+//    const name=req.params.name
+         
+//             const query={title:name}
+            
+//             const cursor= productsCollection.find(query)
+          
+//             res.send(cursor)
+
+
+// });
+//searching=-----
+app.get("/allproducts/:category", async (req, res) => {
+  
+    const category=req.params.category 
+   
+   
+    const count=await productsCollection.estimatedDocumentCount()
+    if(category){
+        let result= await productsCollection.find(
+               
+            {
+                $or:[
+                    {category:{$regex:req.params.category} },
+                    
+                ]
+            }
+           
+        ).toArray()
+       
+        res.send({result,count})
+
+    }
+   
+    
+    
+else{
+    const query = { }
+    const count=await productsCollection.estimatedDocumentCount()
+    const result= await productsCollection.find(query).toArray()
+    res.send({result,count})
+}
+    
+ 
+
+
+});
+//all products:---
 
         app.get("/category/:title", async (req, res) => {
             const title = req.params.title
@@ -97,12 +314,86 @@ async function run() {
         });
         app.post('/category', async (req, res) => {
             const product = req.body
-            console.log(product);
+         
             const result = await productsCollection.insertOne(product);
             res.send(result);
         });
 
+// add to cart-----------------------------------
 
+app.post('/addtocart/:email', async (req, res) => {
+    const addedData= req.body;
+    console.log(addedData)
+
+  
+    const result = await cartAddingCollection.insertOne(addedData);
+    res.send(result);
+});
+
+
+app.get('/addtocart', async (req, res) => {
+    const email=req.query.email 
+
+    const query={email:email}
+   
+  
+    const result= await cartAddingCollection.find(query).toArray();
+    const count=await cartAddingCollection.estimatedDocumentCount()
+    
+    res.send({result,count});
+});
+
+
+app.delete('/addtocart/:id', async (req, res) => {
+    const id=req.params.id
+
+   
+    const query={_id:ObjectId(id)}
+   
+  
+    const result= await cartAddingCollection.deleteOne(query)
+   
+    res.send(result);
+});
+
+
+
+app.get('/allorders', async (req, res) => {
+ 
+
+    const query={}
+   
+  
+    const result= await cartAddingCollection.find(query).toArray();
+    const count=await cartAddingCollection.estimatedDocumentCount()
+    
+    res.send({result,count});
+});
+
+//add to cart =---------------------------------
+
+
+//add to wish -----------------------------------------
+
+app.post("/addtowish/:email",async(req,res)=>{
+    console.log(req.body)
+    const wishproduct=req.body;
+ 
+    const result=await wishAddingCollection.insertOne(wishproduct);
+    res.send(result);
+})
+app.get("/addtowish",async(req,res)=>{
+
+    const email=req.query.email
+   
+    const query={email:email}
+   
+   
+    const cursor=await wishAddingCollection.find(query).toArray()
+    res.send(cursor);
+})
+
+//add to wish -----------------------------------------------
 
         // ------------------------------: jwt :--------------------------\\
         app.get('/jwt', async (req, res) => {
@@ -119,7 +410,28 @@ async function run() {
 
         // ------------------------------: jwt :--------------------------\\
 
-       
+      //contactinfo:=== 
+app.post("/addmessage/:email",async(req,res)=>{
+    console.log(req.body)
+    const contactInfo=req.body;
+    
+ 
+    const result=await contactCollection.insertOne(contactInfo);
+    res.send(result);
+})
+
+
+app.get("/addmessage",async(req,res)=>{
+
+   
+    const query={}
+   
+   
+    const cursor=await contactCollection.find(query).toArray()
+    res.send(cursor);
+})
+
+//contactinfo:=== 
 
         // ------------------------------: admin email :--------------------------\\
 
@@ -204,13 +516,6 @@ app.get('/bookings', async (req, res) => {
 
 
 
-
-app.post('/bookings', async (req, res) => {
-    const bookedData = req.body;
-  
-    const result = await bookingCollection.insertOne(bookedData);
-    res.send(result);
-});
 
 
 
