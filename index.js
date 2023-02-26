@@ -46,7 +46,7 @@ async function run() {
        const wishAddingCollection=client.db("resale-market-product").collection("wishCollection")
        const contactCollection=client.db("resale-market-product").collection("contactCollection")
 
-
+       const newsEmailCollection=client.db("resale-market-product").collection("newsemailCollection")
 
         
         // const verifyAdmin = async (req, res, next) => {
@@ -75,7 +75,7 @@ async function run() {
             const query = {};
 
             const cursor = await usersCollection.find(query).toArray()
-            res.send(cursor);
+            res.send({cursor});
         });
         app.delete("/allusers/:id",async(req,res)=>{
             const id=req.params.id
@@ -369,6 +369,18 @@ app.get('/allorders', async (req, res) => {
     
     res.send({result,count});
 });
+app.delete('/allorders/:id', async (req, res) => {
+    const id=req.params.id
+
+   
+    const query={_id:ObjectId(id)}
+   
+  
+    const result= await cartAddingCollection.deleteOne(query)
+   
+    res.send(result);
+});
+
 
 //add to cart =---------------------------------
 
@@ -428,10 +440,19 @@ app.get("/addmessage",async(req,res)=>{
    
    
     const cursor=await contactCollection.find(query).toArray()
-    res.send(cursor);
+    res.send({cursor});
 })
 
 //contactinfo:=== 
+
+
+app.post("/addnewsmail",async(req,res)=>{
+    console.log(req.body)
+    const newsEmail=req.body;
+ 
+    const result=await newsEmailCollection.insertOne(newsEmail);
+    res.send(result);
+})
 
         // ------------------------------: admin email :--------------------------\\
 
