@@ -12,7 +12,7 @@ require('dotenv').config()
 
 
 
-const uri = "mongodb+srv://resale-market:AZ9RDCN7iytTHvPM@cluster0.ye2spym.mongodb.net/?retryWrites=true&w=majority";
+const uri = "mongodb+srv://resale-market:AZ9RDCN7iytTHvPM@cluster0.ye2spym.mongodb.net/";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 // ------------------------------: verification jwt :--------------------------\\
@@ -234,7 +234,8 @@ async function run() {
 app.get("/allproducts", async (req, res) => {
     
     
-
+try{
+    
     const page=parseInt(req.query.page )
            const size=parseInt(req.query.size)
             const query={}
@@ -245,6 +246,10 @@ app.get("/allproducts", async (req, res) => {
             const procount=await cartAddingCollection.estimatedDocumentCount()
             res.send({result,count,procount})
 
+}
+catch(err){
+    console.log(err)
+}
 
 });
 //searching-----
